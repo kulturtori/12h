@@ -6,8 +6,36 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="utf-8">
         <style>
+            #clock {outline: 2px solid black;  width: 180px}
         </style>
         <script>
+            function games(){
+                fetch('https://tizenketoras.herokuapp.com/')
+                    .then(response => response.json())
+                    .then(json => {
+                        table = json
+                        for (i = 1; i < table.length; i++) {
+                            if(table[i][1] == "Meccs folyamatban"){
+                                //console.log(i)
+                                var row = table[i]
+                                //console.log(row)
+                                document.getElementById('currentteams').innerHTML = row[2] + " - " + row[5]
+                                document.getElementById('currentgoals').innerHTML = row[3] + " - " + row[4]
+
+                                document.getElementById('next1').innerHTML = table[i+1][1] + " " + table[i+1][2] + " - " + table[i+1][5]
+                                document.getElementById('next2').innerHTML = table[i+2][1] + " " + table[i+2][2] + " - " + table[i+2][5]
+                                document.getElementById('next3').innerHTML = table[i+3][1] + " " + table[i+3][2] + " - " + table[i+3][5]
+
+                                document.getElementById('prev3').innerHTML = table[i-3][2] + " " + table[i-3][3] + " - " + table[i-3][4] + " " + table[i-3][5]
+                                document.getElementById('prev2').innerHTML = table[i-2][2] + " " + table[i-2][3] + " - " + table[i-2][4] + " " + table[i-2][5]
+                                document.getElementById('prev1').innerHTML = table[i-1][2] + " " + table[i-1][3] + " - " + table[i-1][4] + " " + table[i-1][5]
+                            }
+                        }
+                    })
+                }
+            games()
+            setInterval(games,10000)
+                
             
             const monthNames = ["Január", "Február", "Március", "Április", "Május", "Június", "Július", "Augusztus", "Szeptember", "Október", "November", "December"];
             function startTime() {
@@ -23,7 +51,7 @@
                 document.getElementById('time').innerHTML =
                 h + ":" + m + ":" + s;
                 document.getElementById('day').innerHTML =
-                monthNames[mth] + " " + d + ", " + y
+                monthNames[mth] + " " + d + ", " + y;
                 var t = setTimeout(startTime, 500);
             }
             function checkTime(i) {
@@ -34,8 +62,26 @@
         </script>
     </head>
     <body onload="startTime()">
-        <h1 id="time">
-        <h2 id="day">
+        <div id="clock" stlye="outline: 2px">
+            <h1 id="time"></h1>
+            <h2 id="day"></h2></div>
+        <div>
+            <h2>Jelenlegi meccs:</h2>
+            <h1 id="currentteams"></h1>
+            <h1 id="currentgoals"></h1>
+        </div>
+        <div style="padding-top: 1px">
+            <h3>A következő három meccs:</h3>
+            <h2 id="next1"></h2>
+            <h2 id="next2"></h2>
+            <h2 id="next3"></h2>
+        </div>
+        <div style="padding-top: 1px">
+            <h3>Az előző három meccs:</h3>
+            <h2 id="prev3"></h2>
+            <h2 id="prev2"></h2>
+            <h2 id="prev1"></h2>
+        </div>
             
     </body>
 </html>
